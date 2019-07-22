@@ -16,7 +16,8 @@ library(tidyverse)
 commercials <- commercials %>% filter(Advertiser != Year)
 
 drops <- c("Buy", "Watch")
-commercials <- commercials[, !(colnames(commercials) %in% drops)]
+commercials <- commercials[-1, !(colnames(commercials) %in% drops)]
+commercials$spotifyId <- get_spotify_id(commercials$`Song Title`, commercials$Year)
 
 output_path <- "commercial-songs.json"
 commercials %>% 
