@@ -3,11 +3,15 @@ library(jsonlite)
 
 search_endpoint <- "https://api.spotify.com/v1/search"
 
-get_spotify_id <- function(title, artist, year) {
+get_spotify_id <- function(track_title, artist, year) {
   
-  query <- paste(paste("track", title, sep = ":"), 
-                 paste("year", year, sep=":"),
+  query <- paste(paste("track", track_title, sep = ":"),
                  paste("artist", artist, sep = ":"))
+  
+  if (year == 0) {
+    query <- paste(query, paste("year", year, sep=":"))
+  }
+  
   queryList <- list(type="track", q=query, limit=5)
   response <- GET(search_endpoint, 
                   add_headers("Authorization" = auth),
@@ -15,7 +19,7 @@ get_spotify_id <- function(title, artist, year) {
   
   status <- http_status(response)
   if (status$category != "Success") {
-    errorMessage <- paste("Status: ", status, ". Request: ", paste(title, artist, year, sep = " / "), sep = " ")
+    errorMessage <- paste("Status: ", status, ". Request: ", paste(track_title, artist, year, sep = " / "), sep = " ")
     print(errorMessage)
     return("error")
   }
@@ -25,11 +29,15 @@ get_spotify_id <- function(title, artist, year) {
   tracks_total <- nrow(tracks)
   
   if (is.null(tracks_total) || tracks_total == 0) {
-    return("unknown")
+    if (year == 0) {
+      return("unknown")
+    }
+    print(paste("lookup without year for ", track_title))
+    return(get_spotify_id(track_title, artist, 0))
   }
   
   if (tracks_total > 1) {
-    message <- paste("Found more than one track! Total:", tracks_total, "tracks. Request: ", title, year, sep = " ")
+    message <- paste("Found more than one track! Total:", tracks_total, "tracks. Request: ", track_title, year, sep = " ")
     print(message)
   }
   spotify_id <- tracks[1, ]$id

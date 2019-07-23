@@ -18,11 +18,17 @@ commercials <- commercials %>% filter(Advertiser != Year)
 drops <- c("Buy", "Watch")
 commercials <- commercials[-1, !(colnames(commercials) %in% drops)]
 commercials$spotifyId <- mapply(get_spotify_id,
-                                title = commercials$`Song Title`,
+                                track_title = commercials$`Song Title`,
                                 artist = commercials$Artist,
                                 year = commercials$Year)
 
 output_path <- "commercial-songs.json"
 commercials %>% 
+  toJSON() %>%
+  write_lines(output_path)
+
+output_path <- "commercial-songs-unknown-id.json"
+commercials %>% 
+  filter(spotifyId == "unknown") %>%
   toJSON() %>%
   write_lines(output_path)
