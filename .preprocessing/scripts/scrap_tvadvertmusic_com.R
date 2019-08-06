@@ -37,11 +37,37 @@ songs <- songs %>%
   mutate(RawInfo = load_raw_info(Link))
 
 # Parse info to extract Advertizer, year, singer & song
+library(stringr)
+try_extract_artist <- function(info) {
+  res <- str_match(info, "Artis(t|ts):(.+)\\.")
+  artist <- str_squish(res[,3])
+  return(artist)
+}
+
+try_extract_song <- function(info) {
+  res <- str_match(info, "(Music|Song):(.+)\\.(.*)Artist")
+  song <- str_squish(res[,3])
+  return(song)
+}
+
+try_extract_year <- function(title, info) {
+  res <- str_match(info, "()\\d{2}")
+  year <- str_squish(res[,1])
+  return(year)
+}
+
+try_extract_advertizer <- function(title) {
+  res <- str_match(title, "((\\d{4})?)(.+) Commercial")
+  advertizer <- str_squish(res[,4])
+  return(advertizer)
+}
 
 songs <- songs %>%
   rowwise() %>% 
   mutate(
-    Artist = try_extract_artist(Raw),
+    Artist = try_extract_artist(RawInfo),
     Song = try_extract_song(RawInfo),
     Year = try_extract_year(Title, RawInfo),
     Advertiser = try_extract_advertizer(Title))
+
+songs %>% write.csv("tvadvertmusic_data.csv", na = "")
