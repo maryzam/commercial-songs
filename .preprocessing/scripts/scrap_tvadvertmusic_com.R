@@ -39,21 +39,21 @@ songs <- songs %>%
 # Parse info to extract Advertizer, year, singer & song
 library(stringr)
 try_extract_artist <- function(info) {
-  res <- str_match(info, "Artis(t|ts):(.+)\\.")
-  artist <- str_squish(res[,3])
+  res <- str_match(info, "(Artist|Singer)(s*?):(.+)\\.")
+  artist <- str_squish(res[,4])
   return(artist)
 }
 
 try_extract_song <- function(info) {
-  res <- str_match(info, "(Music|Song):(.+)\\.(.*)Artist")
+  res <- str_match(info, "(Music|Song):(.+)\\.(.*)(Artist|Singer)")
   song <- str_squish(res[,3])
   return(song)
 }
 
 try_extract_year <- function(title, info) {
-  res <- str_match(info, "()\\d{2}")
+  res <- str_match(info, "(20)\\d{2}")
   year <- str_squish(res[,1])
-  return(year)
+  return(as.integer(year))
 }
 
 try_extract_advertizer <- function(title) {
