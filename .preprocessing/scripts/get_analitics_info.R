@@ -23,6 +23,10 @@ uploadAnalitics <- function(spotifyId)
   response <- response[names(response) %in% interesting_fields == TRUE] 
   minified_file_path <- paste0("minified/", spotifyId, ".json")
   write(toJSON(response), file = minified_file_path)
-  
-  return (response)
+}
+
+for (song in commercials_union$SpotifyId) {
+  print(paste("Loading data for ", song))
+  uploadAnalitics(song)
+  print("Done")
 }
