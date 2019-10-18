@@ -1,4 +1,4 @@
-danceability,energy,key,loudness,mode,speechiness,acousticness,instrumentalness,liveness,valence,tempo,type,id,duration_ms,time_signature
+danceability,energy,key,loudness,mode,speechiness,acousticness,instrumentalness,liveness,valence,tempo,type,spotify_id,duration_ms,time_signature
 0.613,0.953,2,-3.435,1,0.0855,0.00148,0.000582,0.152,0.537,105.046,audio_features,305WCRhhS10XUcH6AEwZk6,213800,4
 0.504,0.754,7,-4.943,1,0.031,0.00839,0,0.0964,0.497,108.184,audio_features,5p53PF8DpDlAe7I9zXwirD,226627,4
 0.336,0.815,9,-3.138,1,0.05,0.156,0.000304,0.701,0.31,82.079,audio_features,1B0l38spcI4BXkGJkq8ksb,559200,4
